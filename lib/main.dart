@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:number_analyser/Components/my_button.dart';
+import 'package:number_analyser/Components/text.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -45,70 +47,43 @@ class _HomePageState extends State<HomePage> {
           controller: textController,
           decoration: InputDecoration(
               hintText: 'Enter a number',
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(20))),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+              )),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextButton(
-              onPressed: () {
-                final number = int.parse(textController.text);
-                numbers.add(number);
-                textController.clear();
-              },
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.black,
-                ),
-                child: const Text(
-                  'Add the number',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
+            MyButton(
+              onPressed: addToList,
+              text: 'Add the number',
             ),
-            TextButton(
-              onPressed: () {
-                max = findMaximum(numbers);
-                min = findMinimum(numbers);
-                sum = calculateSum(numbers);
-                ave = calculateAverage(numbers);
-              },
-              child: Container(
-                margin: const EdgeInsets.all(10),
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.black,
-                ),
-                child: const Text(
-                  'Analyse',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-              ),
+            MyButton(
+              onPressed: assignValue,
+              text: 'Analyse',
             ),
           ],
         ),
+        MyButton(
+          onPressed: refresh,
+          text: 'Refresh',
+        ),
         numbers.isNotEmpty
             ? Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                height: 120,
+                margin: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.deepPurple[300],
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Maximum number = $max'),
-                    Text('Minimum number = $min'),
-                    Text('Sum of numbers = $sum'),
-                    Text('Average of numbers = $ave'),
+                    MyText(text: 'Maximum number = $max'),
+                    MyText(text: 'Minimum number = $min'),
+                    MyText(text: 'Sum of numbers = $sum'),
+                    MyText(text: 'Average of numbers = $ave'),
                   ],
                 ),
               )
@@ -151,5 +126,24 @@ class _HomePageState extends State<HomePage> {
       sum += numbers[i];
     }
     return sum / numbers.length;
+  }
+
+  void refresh() {
+    numbers.clear();
+  }
+
+  void assignValue() {
+    setState(() {
+      max = findMaximum(numbers);
+      min = findMinimum(numbers);
+      sum = calculateSum(numbers);
+      ave = calculateAverage(numbers);
+    });
+  }
+
+  void addToList() {
+    final number = int.parse(textController.text);
+    numbers.add(number);
+    textController.clear();
   }
 }
